@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        padding-top: 0;
+      }
+
+      .commute-container {
+        max-width: 400px;
+        border: 2px solid #a5a5a5;
+        border-radius: 14px;
+        margin-top: 24px;
+      }
+
+      .commute-upper {
+        padding: 20px;
+      }
+
+      .commute-upper-header a {
+        text-decoration: none;
+        color: #202124;
+        font-size: 16px;
+        font-weight: 500;
+        display: block;
+        padding: 10px 0 15px;
+      }
+
+      .commute-upper-header p {
+        font-size: 20px;
+        font-weight: 500;
+        color: #202124;
+        padding-bottom: 10px;
+      }
+
+      .modes-btn-container {
+        display: flex;
+        gap: 16px;
+        justify-content: space-around;
+        margin-bottom: 12px;
+      }
+
+      .modes-btn-container .mode-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+      }
+
+      .modes-btn-container .mode-btn.mode-btn-active img {
+        filter: invert(0);
+        background-color: #e0ecfd;
+      }
+
+      .modes-btn-container .mode-btn.mode-btn-active span {
+        color: #007bff;
+      }
+
+      .modes-btn-container .mode-btn img {
+        margin-bottom: 5px;
+        width: 33px;
+        filter: invert(0.5);
+        padding: 4px;
+        border-radius: 50px;
+      }
+
+      .modes-btn-container .mode-btn span {
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        line-height: 0.9375rem;
+        color: black;
+      }
+
+      .ext-input {
+        padding: 8px;
+        border: 1px solid black;
+        border-radius: 8px;
+        width: 100%;
+      }
+
+      .ext-input-address-container label {
+        display: inline-block;
+        margin: 18px 0 10px;
+      }
+
+      #calculate {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 5px;
+        width: 100%;
+      }
+
+      #calculate:hover {
+        background-color: #0056b3;
+      }
+
+      .commute-lower {
+        border-top: 8px solid #dadce0;
+        padding: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!----------------------------- 
+     ------------------------------>
+    <div class="commute-container">
+      <div class="commute-upper">
+        <div class="commute-upper-header">
+          <a href="https://jrgoldfinch.co.uk/" target="_blank">Jrgoldfinch.co.uk</a>
+
+          <p>Commute Time Estimator</p>
+        </div>
+
+        <div class="modes-btn-container">
+          <button class="mode-btn mode-btn-active">
+            <img src="https://maps.gstatic.com/consumer/images/icons/2x/ic_directions_filled_blue900_24px.png" alt="best" />
+            <span>Best</span>
+          </button>
+
+          <button class="mode-btn">
+            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_car_filled_blue900_24dp.png" alt="car" />
+            <span>10 min</span>
+          </button>
+
+          <button class="mode-btn">
+            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_transit_filled_blue900_24dp.png" alt="train" />
+            <span>10 min</span>
+          </button>
+
+          <button class="mode-btn">
+            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_walk_blue900_24dp.png" alt="walk" />
+            <span>10 min</span>
+          </button>
+
+          <button class="mode-btn">
+            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_bike_blue900_24dp.png" alt="cycle" />
+            <span>10 min</span>
+          </button>
+        </div>
+
+        <div style="width: 92%; margin: 0 auto">
+          <div>
+            <input class="ext-input" type="text" placeholder="Enter house address" value="${address}" />
+          </div>
+          <div class="ext-input-address-container" style="margin-bottom: 10px">
+            <label for="destination">Enter your workplace address</label>
+            <input type="text" class="ext-input" id="destination" placeholder="Enter destination address" />
+          </div>
+          <button id="calculate">Calculate Commute</button>
+        </div>
+
+        <div class="commute-result-container"></div>
+
+        <div id="results" style="display: none">
+          <h4>Commute Details</h4>
+          <p id="distance"></p>
+          <p id="duration"></p>
+          <p id="traffic"></p>
+          <ul id="directions"></ul>
+        </div>
+      </div>
+
+      <div class="commute-lower">
+        <div>
+          <div>
+            <span>via A4201</span>
+            <span>31 mins</span>
+          </div>
+          <div>
+            <p>Fastest route now, avoids road closure on W Health Rd</p>
+            <p>6.0 miles</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!----------------------------- 
+     ------------------------------>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
