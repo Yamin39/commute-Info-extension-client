@@ -3,7 +3,7 @@ function styles() {
   const style = document.createElement("style");
   style.innerHTML = `
       /* Styles for the commute info */
-     .commute-container {
+       .commute-container {
         max-width: 400px;
         border: 2px solid #a5a5a5;
         border-radius: 14px;
@@ -43,6 +43,10 @@ function styles() {
         align-items: center;
         border: none;
         background-color: transparent;
+        cursor: not-allowed;
+      }
+
+      .modes-btn-container .mode-btn.mode-btn-active {
         cursor: pointer;
       }
 
@@ -83,6 +87,25 @@ function styles() {
         margin: 18px 0 10px;
       }
 
+      .ext-input-label {
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+
+      .question-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: black;
+        margin-left: 5px;
+        text-decoration: none;
+        border: 1px solid black;
+        border-radius: 50px;
+      }
+
       #calculate {
         background-color: #007bff;
         color: #fff;
@@ -96,6 +119,40 @@ function styles() {
 
       #calculate:hover {
         background-color: #0056b3;
+      }
+
+      .commute-lower {
+        border-top: 8px solid #dadce0;
+        padding: 20px;
+      }
+
+      .fastest-route-container {
+        width: 92%;
+        margin: 0 auto;
+        border-left: 5px solid #1f69dd;
+        padding-left: 20px;
+      }
+
+      .fastest-route-container div {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+      }
+
+      .fastest-route-container div p.route-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.5rem;
+        color: #202124;
+      }
+
+      .fastest-route-container div.route-details {
+        font-size: 0.875rem;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1.25rem;
+        color: #70757a;
       }
     `;
   document.head.appendChild(style);
@@ -116,38 +173,38 @@ window.addEventListener("load", () => {
     // Create a new div to hold the commute info UI
     const commuteDiv = document.createElement("div");
     commuteDiv.innerHTML = `
-    <div class="commute-container">
+     <div class="commute-container">
       <div class="commute-upper">
         <div class="commute-upper-header">
-          <a href="https://jrgoldfinch.co.uk/">Jrgoldfinch.co.uk</a>
+          <a href="https://jrgoldfinch.co.uk/" target="_blank">Jrgoldfinch.co.uk</a>
 
           <p>Commute Time Estimator</p>
         </div>
 
         <div class="modes-btn-container">
-          <button class="mode-btn mode-btn-active">
+          <button class="mode-btn">
             <img src="https://maps.gstatic.com/consumer/images/icons/2x/ic_directions_filled_blue900_24px.png" alt="best" />
-            <span>Best</span>
+            <span id="best-btn-duration">Best</span>
           </button>
 
-          <button class="mode-btn">
+          <button class="mode-btn mode-btn-active">
             <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_car_filled_blue900_24dp.png" alt="car" />
-            <span>10 min</span>
+            <span id="driving-btn-duration">--</span>
           </button>
 
           <button class="mode-btn">
             <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_transit_filled_blue900_24dp.png" alt="train" />
-            <span>10 min</span>
+            <span id="transit-btn-duration">--</span>
           </button>
 
           <button class="mode-btn">
             <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_walk_blue900_24dp.png" alt="walk" />
-            <span>10 min</span>
+            <span id="walking-btn-duration">--</span>
           </button>
 
           <button class="mode-btn">
             <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_bike_blue900_24dp.png" alt="cycle" />
-            <span>10 min</span>
+            <span id="bicycling-btn-duration">--</span>
           </button>
         </div>
 
@@ -159,15 +216,47 @@ window.addEventListener("load", () => {
             <label for="destination">Enter your workplace address</label>
             <input type="text" class="ext-input" id="destination" placeholder="Enter destination address" />
           </div>
+
+          <div>
+            <div style="margin-bottom: 10px; padding-top: 4px">
+              <label for="mpg" class="ext-input-label">MPG - Miles Per Gallon</label>
+              <a
+                href="https://www.caranddriver.com/research/a31873205/mpg-meaning/#:~:text=What%20Is%20MPG,vehicle%27s%20official%20MPG."
+                target="_blank"
+                class="question-icon"
+                >?</a
+              >
+              <input type="number" class="ext-input" id="mpg" placeholder="Enter MPG" />
+            </div>
+          </div>
+
+          <div>
+            <div style="margin-bottom: 10px; padding-top: 4px">
+              <label for="fuel-price" class="ext-input-label">Fuel Price Per Liter</label>
+              <input type="number" class="ext-input" id="fuel-price" placeholder="Enter Fuel Price" />
+            </div>
+          </div>
+
           <button id="calculate">Calculate Commute</button>
         </div>
+      </div>
 
-        <div id="results" style="display: none">
-          <h4>Commute Details</h4>
-          <p id="distance"></p>
-          <p id="duration"></p>
-          <p id="traffic"></p>
-          <ul id="directions"></ul>
+      <div id="other-routes-container">
+        <div id="fastest-route" class="commute-lower" style="display: none">
+          <div class="fastest-route-container">
+            <div style="margin-bottom: 8px">
+              <p id="fastest-route-name" class="route-name" style="width: 70%"></p>
+              <p id="fastest-duration"></p>
+            </div>
+            <div class="route-details">
+              <p style="width: 70%">Fastest route</p>
+              <p id="fastest-distance"></p>
+            </div>
+            <div class="route-details">
+              <p style="width: 70%">Fuel Price:</p>
+              <p id="fastest-route-fuel-price"></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -179,8 +268,17 @@ window.addEventListener("load", () => {
     // Add event listener to the Calculate Commute button
     document.getElementById("calculate").addEventListener("click", async () => {
       const destination = document.getElementById("destination").value;
+      const milesPerGallon = document.getElementById("mpg").value;
+      const fuelPrice = document.getElementById("fuel-price").value;
+
       if (!destination) {
         alert("Please enter a destination address.");
+        return;
+      } else if (!milesPerGallon) {
+        alert("Please enter the MPG value.");
+        return;
+      } else if (!fuelPrice) {
+        alert("Please enter the fuel price.");
         return;
       }
 
@@ -198,10 +296,10 @@ window.addEventListener("load", () => {
 
 // Function to fetch commute data from Google Maps Directions API
 async function getCommuteInfo(origin, destination) {
-  const response = await fetch(`http://localhost:3000/directions?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`);
+  const response = await fetch(
+    `https://commute-info-extension-server.vercel.app/directions?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`
+  );
   const data = await response.json();
-
-  findFastestRoute(data)
 
   if (data.status === "ZERO_RESULTS") {
     alert("No routes found between the specified locations.");
@@ -220,49 +318,76 @@ async function getCommuteInfo(origin, destination) {
 
 function displayResults(data) {
   console.log(data);
-  const resultsContainer = document.getElementById("results");
-  resultsContainer.style.display = "block";
-  resultsContainer.innerHTML = ""; // Clear previous results
 
   // Check if the response status is OK
   if (data.status !== "OK") {
-    const errorMessage = document.createElement("p");
-    errorMessage.innerText = "No routes found or invalid response";
-    resultsContainer.appendChild(errorMessage);
     return;
   }
 
-  // Loop through each route in the response
-  data.routes.forEach((route, index) => {
-    const { legs } = route;
-    const { duration, distance } = legs[0];
+  const fastestRoute = findFastestRoute(data?.modes?.driving);
+  displayFastestRoute(fastestRoute);
 
-    // Create elements to display route information
-    const routeTitle = document.createElement("h4");
-    routeTitle.innerText = `Route ${index + 1}`;
-    resultsContainer.appendChild(routeTitle);
+  // filter routes without the fastest route
+  const otherRoutes = data?.modes?.driving?.routes.filter((route) => route?.summary !== fastestRoute?.summary);
+  displayOtherRoutes(otherRoutes);
 
-    const routeInfo = document.createElement("div");
-    routeInfo.innerHTML = `
-      <p>Estimated Time: ${duration.text}</p>
-      <p>Distance: ${distance.text}</p>
-    `;
+  // update the duration for each mode button
+  updateDuration(data);
 
-    // Display step-by-step directions
-    const directionsList = document.createElement("ul");
-    legs[0].steps.forEach((step) => {
-      const direction = document.createElement("li");
-      direction.innerText = step.html_instructions.replace(/<[^>]+>/g, ""); // Strips HTML tags from instructions
-      directionsList.appendChild(direction);
-    });
+  // // Loop through each route in the response
+  // data.routes.forEach((route, index) => {
+  //   const { legs } = route;
+  //   const { duration, distance } = legs[0];
 
-    routeInfo.appendChild(directionsList);
-    resultsContainer.appendChild(routeInfo);
-  });
+  //   // Create elements to display route information
+  //   const routeTitle = document.createElement("h4");
+  //   routeTitle.innerText = `Route ${index + 1}`;
+  //   resultsContainer.appendChild(routeTitle);
+
+  //   const routeInfo = document.createElement("div");
+  //   routeInfo.innerHTML = `
+  //     <p>Estimated Time: ${duration.text}</p>
+  //     <p>Distance: ${distance.text}</p>
+  //   `;
+
+  //   // Display step-by-step directions
+  //   const directionsList = document.createElement("ul");
+  //   legs[0].steps.forEach((step) => {
+  //     const direction = document.createElement("li");
+  //     direction.innerText = step.html_instructions.replace(/<[^>]+>/g, ""); // Strips HTML tags from instructions
+  //     directionsList.appendChild(direction);
+  //     ``;
+  //   });
+
+  //   routeInfo.appendChild(directionsList);
+  //   resultsContainer.appendChild(routeInfo);
+  // });
 }
 
 // utils
 
+// Function to update the duration for each mode button
+function updateDuration(data) {
+  const modes = ["driving", "transit", "walking", "bicycling"];
+  modes.forEach((mode) => {
+    const route = findFastestRoute(data?.modes[mode]);
+    const duration = route?.legs[0]?.duration?.text;
+    document.getElementById(`${mode}-btn-duration`).innerText = duration;
+  });
+}
+
+// Function to calculate the fuel price
+function calculateFuelPrice(distance) {
+  const milesPerGallon = document.getElementById("mpg").value;
+  const fuelPrice = document.getElementById("fuel-price").value;
+  const totalFuel = distance / milesPerGallon;
+  const fuelInLiter = totalFuel * 4.54609;
+  const fuelCost = (fuelInLiter * fuelPrice).toFixed(2);
+  console.log(fuelCost);
+  return fuelCost;
+}
+
+// Function to find the fastest route from the list of routes
 function findFastestRoute(data) {
   if (!data.routes || data.routes.length === 0) {
     console.log("No routes available.");
@@ -286,4 +411,53 @@ function findFastestRoute(data) {
 
   console.log(fastestRoute);
   return fastestRoute;
+}
+
+// Function to display the fastest route
+function displayFastestRoute(route) {
+  console.log(route);
+  const fastestRouteContainer = document.querySelector("#fastest-route");
+  const routeName = document.querySelector("p#fastest-route-name");
+  const routeDuration = document.querySelector("p#fastest-duration");
+  const routeDistance = document.querySelector("p#fastest-distance");
+  const fuelPrice = document.querySelector("p#fastest-route-fuel-price");
+
+  fastestRouteContainer.style.display = "block";
+  routeName.innerText = `via ${route.summary}`;
+  routeDuration.innerText = route?.legs[0]?.duration?.text;
+  routeDistance.innerText = `${(route?.legs[0]?.distance?.value / 1609).toFixed(1)} miles`;
+  fuelPrice.innerText = `${calculateFuelPrice(Number(route?.legs[0]?.distance?.value / 1609))}£`;
+}
+
+// Function to display other routes
+function displayOtherRoutes(routes) {
+  const otherRoutesContainer = document.querySelector("#other-routes-container");
+  otherRoutesContainer.style.display = "block";
+  // otherRoutesContainer.innerHTML = ""; // Clear previous routes
+
+  console.log(routes);
+
+  routes.forEach((route, index) => {
+    const otherRoute = document.createElement("div");
+    otherRoute.style.borderTop = "1px solid #dadce0";
+    otherRoute.style.padding = "20px";
+
+    const duration = route?.legs[0]?.duration?.text;
+    const distance = (route?.legs[0]?.distance?.value / 1609).toFixed(1);
+
+    otherRoute.innerHTML = `
+        <div class="fastest-route-container" style="border-left: 0px; padding-left: 0px;">
+          <div style="margin-bottom: 8px">
+            <p class="route-name" style="width: 70%">via ${route?.summary}</p>
+            <p>${duration}</p>
+          </div>
+          <div class="route-details">
+            <p style="width: 70%">Fuel Price: ${calculateFuelPrice(Number(distance))}£</p>
+            <p>${distance} miles</p>
+          </div>
+        </div>
+    `;
+
+    otherRoutesContainer.appendChild(otherRoute);
+  });
 }

@@ -53,6 +53,10 @@
         align-items: center;
         border: none;
         background-color: transparent;
+        cursor: not-allowed;
+      }
+
+      .modes-btn-container .mode-btn.mode-btn-active {
         cursor: pointer;
       }
 
@@ -93,6 +97,25 @@
         margin: 18px 0 10px;
       }
 
+      .ext-input-label {
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+
+      .question-icon {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: black;
+        margin-left: 5px;
+        text-decoration: none;
+        border: 1px solid black;
+        border-radius: 50px;
+      }
+
       #calculate {
         background-color: #007bff;
         color: #fff;
@@ -110,80 +133,48 @@
 
       .commute-lower {
         border-top: 8px solid #dadce0;
-        padding: 20px 0;
+        padding: 20px;
+      }
+
+      .fastest-route-container {
+        width: 92%;
+        margin: 0 auto;
+        border-left: 5px solid #1f69dd;
+        padding-left: 20px;
+      }
+
+      .fastest-route-container div {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+      }
+
+      .fastest-route-container div p.route-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.5rem;
+        color: #202124;
+      }
+
+      .fastest-route-container div.route-details {
+        font-size: 0.875rem;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1.25rem;
+        color: #70757a;
       }
     </style>
   </head>
   <body>
     <!----------------------------- 
      ------------------------------>
-    <div class="commute-container">
+    <div class="commute-container" style="width: max-content">
       <div class="commute-upper">
         <div class="commute-upper-header">
           <a href="https://jrgoldfinch.co.uk/" target="_blank">Jrgoldfinch.co.uk</a>
 
           <p>Commute Time Estimator</p>
-        </div>
-
-        <div class="modes-btn-container">
-          <button class="mode-btn mode-btn-active">
-            <img src="https://maps.gstatic.com/consumer/images/icons/2x/ic_directions_filled_blue900_24px.png" alt="best" />
-            <span>Best</span>
-          </button>
-
-          <button class="mode-btn">
-            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_car_filled_blue900_24dp.png" alt="car" />
-            <span>10 min</span>
-          </button>
-
-          <button class="mode-btn">
-            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_transit_filled_blue900_24dp.png" alt="train" />
-            <span>10 min</span>
-          </button>
-
-          <button class="mode-btn">
-            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_walk_blue900_24dp.png" alt="walk" />
-            <span>10 min</span>
-          </button>
-
-          <button class="mode-btn">
-            <img src="https://maps.gstatic.com/consumer/images/icons/2x/directions_bike_blue900_24dp.png" alt="cycle" />
-            <span>10 min</span>
-          </button>
-        </div>
-
-        <div style="width: 92%; margin: 0 auto">
-          <div>
-            <input class="ext-input" type="text" placeholder="Enter house address" value="${address}" />
-          </div>
-          <div class="ext-input-address-container" style="margin-bottom: 10px">
-            <label for="destination">Enter your workplace address</label>
-            <input type="text" class="ext-input" id="destination" placeholder="Enter destination address" />
-          </div>
-          <button id="calculate">Calculate Commute</button>
-        </div>
-
-        <div class="commute-result-container"></div>
-
-        <div id="results" style="display: none">
-          <h4>Commute Details</h4>
-          <p id="distance"></p>
-          <p id="duration"></p>
-          <p id="traffic"></p>
-          <ul id="directions"></ul>
-        </div>
-      </div>
-
-      <div class="commute-lower">
-        <div>
-          <div>
-            <span>via A4201</span>
-            <span>31 mins</span>
-          </div>
-          <div>
-            <p>Fastest route now, avoids road closure on W Health Rd</p>
-            <p>6.0 miles</p>
-          </div>
         </div>
       </div>
     </div>
