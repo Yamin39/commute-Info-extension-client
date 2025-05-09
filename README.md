@@ -1,1 +1,2 @@
-### [commute-Info-extension](https://github.com/Yamin39/commute-Info-extension-client/)
+### [commute-Info-extension](https://github.com/Yamin39/commute-Info-extension-client/) - Browser extension
+
